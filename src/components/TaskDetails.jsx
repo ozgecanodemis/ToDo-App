@@ -5,7 +5,7 @@ import AddTask from "./AddTask"
 import Filter from "./Filter"
 
 function TaskDetails({ selectedList, onAddTask }) {
-    const [showAddTask, setShowAddTask] = useState(false)
+    const [showAddTask, setShowAddTask] = useState(true) // hep açık
     const [filters, setFilters] = useState({
         status: "",
         expired: false,
@@ -87,18 +87,28 @@ function TaskDetails({ selectedList, onAddTask }) {
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-6">
             {/* Header */}
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">{selectedList.title}</h2>
-                <button
-                    onClick={() => setShowAddTask(true)}
-                    className="px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition flex items-center gap-2"
-                >
-                    <span>+</span>
-                    Add Item
-                </button>
+                {/* Add Item button kaldırıldı çünkü form hep açık */}
             </div>
+
+            {/* Filter Component */}
+            <Filter
+                onFilterChange={(filters) => setFilters(filters)}
+                onSortChange={(sort) => setSortOption(sort)}
+            />
+
+            {/* Add Task Form */}
+            {showAddTask && (
+                <div className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm">
+                    <AddTask
+                        selectedList={selectedList}
+                        onAddTask={onAddTask}
+                    />
+                </div>
+            )}
 
             {/* Tasks Table */}
             <div className="overflow-x-auto">
@@ -141,22 +151,7 @@ function TaskDetails({ selectedList, onAddTask }) {
                     </tbody>
                 </table>
             </div>
-
-            {showAddTask && (
-                <AddTask selectedList={selectedList} onClose={() => setShowAddTask(false)} onAddTask={onAddTask} />
-            )}
-
-
-            <div>
-                {/* Filter Component */}
-                <Filter
-                    onFilterChange={(filters) => setFilters(filters)}
-                    onSortChange={(sort) => setSortOption(sort)}
-                />
-            </div>
         </div>
-
-
     )
 }
 
