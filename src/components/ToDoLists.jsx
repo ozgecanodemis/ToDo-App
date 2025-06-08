@@ -67,7 +67,7 @@ function ToDoLists() {
     };
 
     return (
-        <div className="bg-gray-100 p-6 min-h-screen">
+        <div className="bg-gray-100 p-6 ">
             <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl flex divide-x">
                 {/* Left Panel - To-Do Lists */}
                 <div className="w-1/4 p-6">

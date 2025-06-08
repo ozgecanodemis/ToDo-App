@@ -1,44 +1,51 @@
 {
-    "lists": [
+  "lists": [
+    {
+      "id": "1",
+      "title": "Example List 1",
+      "tasks": [
         {
-            "id": "1",
-            "title": "Example List 1",
-            "tasks": [
-                {
-                    "id": 1,
-                    "name": "Task A",
-                    "description": "Description of Task A",
-                    "deadline": "May 1, 2024",
-                    "status": "In Progress"
-                },
-                {
-                    "id": 2,
-                    "name": "Task B",
-                    "description": "Description of Task B",
-                    "deadline": "Apr 26, 2024",
-                    "status": "Not Started"
-                }
-            ]
+          "id": 1,
+          "name": "Task A",
+          "description": "Description of Task A",
+          "deadline": "May 1, 2024",
+          "status": "In Progress"
         },
         {
-            "id": "2",
-            "title": "Example List 2",
-            "tasks": [
-                {
-                    "id": 5,
-                    "name": "Task X",
-                    "description": "Description of Task X",
-                    "deadline": "May 15, 2024",
-                    "status": "Active"
-                },
-                {
-                    "id": 6,
-                    "name": "Task Y",
-                    "description": "Description of Task Y",
-                    "deadline": "May 20, 2024",
-                    "status": "Pending"
-                }
-            ]
+          "id": 2,
+          "name": "Task B",
+          "description": "Description of Task B",
+          "deadline": "Apr 26, 2024",
+          "status": "Not Started"
+        },
+        {
+          "id": 1749377427581,
+          "name": "active try",
+          "status": "Active",
+          "deadline": "2025-06-26",
+          "description": "some dec"
         }
-    ]
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Example List 2",
+      "tasks": [
+        {
+          "id": 5,
+          "name": "Task X",
+          "description": "Description of Task X",
+          "deadline": "May 15, 2024",
+          "status": "Active"
+        },
+        {
+          "id": 6,
+          "name": "Task Y",
+          "description": "Description of Task Y",
+          "deadline": "May 20, 2024",
+          "status": "Pending"
+        }
+      ]
+    }
+  ]
 }
