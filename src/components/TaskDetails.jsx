@@ -1,4 +1,11 @@
-function TaskDetails({ selectedTask, selectedList, selectedTaskId }) {
+"use client"
+
+import { useState } from "react"
+import AddTask from "./AddTask"
+
+function TaskDetails({ selectedTask, selectedList, selectedTaskId, onAddTask }) {
+    const [showAddTask, setShowAddTask] = useState(false)
+
     const getStatusColor = (status) => {
         switch (status) {
             case "Complete":
@@ -16,73 +23,82 @@ function TaskDetails({ selectedTask, selectedList, selectedTaskId }) {
         }
     }
 
-    return (
-        <div className="w-1/2 p-6">
-            {selectedTask ? (
-                <div>
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-bold">{selectedList.title}</h2>
-                        <button className="bg-gray-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                            + Add Item
-                        </button>
-                    </div>
+    if (!selectedList) {
+        return (
+            <div className="flex items-center justify-center h-64 text-gray-500">
+                <div className="text-center">
+                    <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5v2m6 6H9"
+                        />
+                    </svg>
+                    <p>Select a list to view tasks.</p>
+                </div>
+            </div>
+        )
+    }
 
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full border border-gray-200 rounded-lg">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">Name</th>
-                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">Description</th>
-                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">Deadline</th>
-                                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className="bg-sky-50 border-l-4 border-sky-500">
-                                    <td className="px-4 py-3 text-sm border-b">{selectedTask.name}</td>
-                                    <td className="px-4 py-3 text-sm border-b">{selectedTask.description}</td>
-                                    <td className="px-4 py-3 text-sm border-b">{selectedTask.deadline}</td>
-                                    <td className="px-4 py-3 text-sm border-b">
-                                        <span
-                                            className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedTask.status)}`}
-                                        >
-                                            {selectedTask.status}
+    return (
+        <div className="space-y-4">
+            {/* Header */}
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">{selectedList.title}</h2>
+                <button
+                    onClick={() => setShowAddTask(true)}
+                    className="px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition flex items-center gap-2"
+                >
+                    <span>+</span>
+                    Add Item
+                </button>
+            </div>
+
+            {/* Tasks Table */}
+            <div className="overflow-x-auto">
+                <table className="min-w-full">
+                    <thead>
+                        <tr className="border-b border-gray-200">
+                            <th className="text-left py-3 px-4 font-medium text-gray-700">Name</th>
+                            <th className="text-left py-3 px-4 font-medium text-gray-700">Description</th>
+                            <th className="text-left py-3 px-4 font-medium text-gray-700">Deadline</th>
+                            <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {selectedList.tasks && selectedList.tasks.length > 0 ? (
+                            selectedList.tasks.map((task) => (
+                                <tr key={task.id} className="border-b border-gray-100 hover:bg-gray-50">
+                                    <td className="py-3 px-4 font-medium">{task.name}</td>
+                                    <td className="py-3 px-4 text-gray-600">{task.description}</td>
+                                    <td className="py-3 px-4 text-gray-600">
+                                        {new Date(task.deadline).toLocaleDateString(undefined, {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                        })}
+                                    </td>
+                                    <td className="py-3 px-4">
+                                        <span className={`px-2 py-1 rounded-md text-sm font-medium ${getStatusColor(task.status)}`}>
+                                            {task.status}
                                         </span>
                                     </td>
                                 </tr>
-                                {/* Diğer task'ları da göster */}
-                                {selectedList.tasks
-                                    .filter((task) => task.id !== selectedTaskId)
-                                    .map((task) => (
-                                        <tr key={task.id} className="hover:bg-gray-50">
-                                            <td className="px-4 py-3 text-sm border-b">{task.name}</td>
-                                            <td className="px-4 py-3 text-sm border-b">{task.description}</td>
-                                            <td className="px-4 py-3 text-sm border-b">{task.deadline}</td>
-                                            <td className="px-4 py-3 text-sm border-b">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(task.status)}`}>
-                                                    {task.status}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            ) : (
-                <div className="flex items-center justify-center h-64 text-gray-500">
-                    <div className="text-center">
-                        <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                            />
-                        </svg>
-                        <p className="text-lg font-medium">Select a task to view details</p>
-                    </div>
-                </div>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="4" className="py-8 px-4 text-center text-gray-500">
+                                    No tasks in this list.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {showAddTask && (
+                <AddTask selectedList={selectedList} onClose={() => setShowAddTask(false)} onAddTask={onAddTask} />
             )}
         </div>
     )

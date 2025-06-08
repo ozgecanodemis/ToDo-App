@@ -1,146 +1,128 @@
-import { useState } from "react"
-import TaskDetails from "./TaskDetails"
+import { useEffect, useState } from "react";
+import TaskDetails from "./TaskDetails";
 
 function ToDoLists() {
-    const [lists, setLists] = useState([
-        {
-            id: 1,
-            title: "Example List 1",
-            tasks: [
-                {
-                    id: 1,
-                    name: "Task A",
-                    description: "Description of Task A",
-                    deadline: "May 1, 2024",
-                    status: "In Progress",
-                },
-                {
-                    id: 2,
-                    name: "Task B",
-                    description: "Description of Task B",
-                    deadline: "Apr 26, 2024",
-                    status: "Not Started",
-                },
-                {
-                    id: 3,
-                    name: "Task C",
-                    description: "Description of Task C",
-                    deadline: "Apr 26, 2024",
-                    status: "In Progress",
-                },
-                {
-                    id: 4,
-                    name: "Task D",
-                    description: "Description of Task D",
-                    deadline: "Apr 26, 2024",
-                    status: "Complete",
-                },
-            ],
-        },
-        {
-            id: 2,
-            title: "Example List 2",
-            tasks: [
-                {
-                    id: 5,
-                    name: "Task X",
-                    description: "Description of Task X",
-                    deadline: "May 15, 2024",
-                    status: "Active",
-                },
-                {
-                    id: 6,
-                    name: "Task Y",
-                    description: "Description of Task Y",
-                    deadline: "May 20, 2024",
-                    status: "Pending",
-                },
-            ],
-        },
-        {
-            id: 3,
-            title: "Example List 3",
-            tasks: [
-                {
-                    id: 7,
-                    name: "Task Alpha",
-                    description: "Description of Task Alpha",
-                    deadline: "Jun 1, 2024",
-                    status: "In Progress",
-                },
-            ],
-        },
-    ])
+    const [lists, setLists] = useState([]);
+    const [selectedListId, setSelectedListId] = useState(null);
+    const [selectedTaskId, setSelectedTaskId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [error, setError] = useState(null);
 
-    const [selectedListId, setSelectedListId] = useState(1)
-    const [selectedTaskId, setSelectedTaskId] = useState(null)
-    const [searchTerm, setSearchTerm] = useState("")
+    useEffect(() => {
+        fetch("http://localhost:3000/lists") // Adjust if your API is on another port
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch lists.");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                setLists(data);
+                if (data.length > 0) {
+                    setSelectedListId(data[0].id);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setError("An error occurred while fetching lists.");
+            });
+    }, []);
 
-    const selectedList = lists.find((list) => list.id === selectedListId)
-    const selectedTask = selectedList?.tasks.find((task) => task.id === selectedTaskId)
+    const selectedList = lists.find((list) => list.id === selectedListId);
+    const selectedTask = selectedList?.tasks.find((task) => task.id === selectedTaskId);
 
     const filteredTasks =
-        selectedList?.tasks.filter((task) => task.name.toLowerCase().includes(searchTerm.toLowerCase())) || []
+        selectedList?.tasks.filter((task) =>
+            task.name.toLowerCase().includes(searchTerm.toLowerCase())
+        ) || [];
 
     const handleDelete = () => {
-        const updatedLists = lists.filter((list) => list.id !== selectedListId)
-        setLists(updatedLists)
-        setSelectedTaskId(null)
+        if (window.confirm("Are you sure you want to delete this list?")) {
+            const updatedLists = lists.filter((list) => list.id !== selectedListId);
+            setLists(updatedLists);
+            setSelectedTaskId(null);
 
-        if (updatedLists.length > 0) {
-            setSelectedListId(updatedLists[0].id)
-        } else {
-            setSelectedListId(null)
+            if (updatedLists.length > 0) {
+                setSelectedListId(updatedLists[0].id);
+            } else {
+                setSelectedListId(null);
+            }
         }
-    }
+    };
+
+    // New function to handle adding a task to the selected list and update state
+    const handleAddTask = (newTask) => {
+        setLists((prevLists) =>
+            prevLists.map((list) =>
+                list.id === selectedListId
+                    ? { ...list, tasks: [...list.tasks, newTask] }
+                    : list
+            )
+        );
+        setSelectedTaskId(newTask.id);
+    };
 
     const handleTaskClick = (taskId) => {
-        setSelectedTaskId(taskId)
-    }
+        setSelectedTaskId(taskId);
+    };
 
     return (
-        <div className="bg-gray-100 p-6">
+        <div className="bg-gray-100 p-6 min-h-screen">
             <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl flex divide-x">
-                {/* Sol Panel - To-Do Lists */}
+                {/* Left Panel - To-Do Lists */}
                 <div className="w-1/4 p-6">
                     <h2 className="text-xl font-bold mb-4">To-Do Lists</h2>
                     <hr className="mb-4" />
+                    {error && (
+                        <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
+                            {error}
+                        </div>
+                    )}
                     <ul className="space-y-2">
-                        {lists.map((list) => (
-                            <button
-                                key={list.id}
-                                onClick={() => {
-                                    setSelectedListId(list.id)
-                                    setSelectedTaskId(null)
-                                }}
-                                className={`w-full text-left p-3 rounded-lg transition-colors ${selectedListId === list.id ? "bg-sky-200 text-sky-800" : "hover:bg-gray-100"
-                                    }`}
-                            >
-                                {list.title}
-                            </button>
-                        ))}
+                        {lists.length > 0 ? (
+                            lists.map((list) => (
+                                <button
+                                    key={list.id}
+                                    onClick={() => {
+                                        setSelectedListId(list.id);
+                                        setSelectedTaskId(null);
+                                        setSearchTerm("");
+                                    }}
+                                    className={`w-full text-left p-3 rounded-lg transition-colors ${selectedListId === list.id
+                                        ? "bg-sky-200 text-sky-800 font-semibold"
+                                        : "hover:bg-gray-100"
+                                        }`}
+                                >
+                                    {list.title}
+                                </button>
+                            ))
+                        ) : (
+                            <p className="text-gray-500">No lists available.</p>
+                        )}
                     </ul>
                 </div>
 
-                {/* Orta Panel - To-Do List Tasks */}
+                {/* Middle Panel - Tasks */}
                 <div className="w-1/3 p-6">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-bold">To-Do List</h2>
-                        <button
-                            onClick={handleDelete}
-                            className="bg-gray-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
-                        >
-                            delete list
-                        </button>
+                        <h2 className="text-xl font-bold">Tasks</h2>
+                        {selectedList && (
+                            <button
+                                onClick={handleDelete}
+                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                            >
+                                Delete List
+                            </button>
+                        )}
                     </div>
 
-                    {selectedList && (
+                    {selectedList ? (
                         <>
                             <div className="mb-4">
                                 <div className="relative">
                                     <input
                                         type="text"
-                                        placeholder="Task search"
+                                        placeholder="Search tasks..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
@@ -161,40 +143,57 @@ function ToDoLists() {
                                 </div>
                             </div>
 
-                            <ul className="space-y-2">
-                                {filteredTasks.map((task) => (
-                                    <li
-                                        key={task.id}
-                                        onClick={() => handleTaskClick(task.id)}
-                                        className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedTaskId === task.id
-                                            ? "bg-sky-100 border-l-4 border-sky-500"
-                                            : "bg-gray-50 hover:bg-gray-100"
-                                            }`}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium">{task.name}</span>
-                                            {selectedTaskId === task.id && (
-                                                <svg className="h-4 w-4 text-sky-500" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            )}
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+                            {filteredTasks.length > 0 ? (
+                                <ul className="space-y-2">
+                                    {filteredTasks.map((task) => (
+                                        <li
+                                            key={task.id}
+                                            onClick={() => handleTaskClick(task.id)}
+                                            className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedTaskId === task.id
+                                                ? "bg-sky-100 border-l-4 border-sky-500"
+                                                : "bg-gray-50 hover:bg-gray-100"
+                                                }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-medium">{task.name}</span>
+                                                {selectedTaskId === task.id && (
+                                                    <svg
+                                                        className="h-4 w-4 text-sky-500"
+                                                        fill="currentColor"
+                                                        viewBox="0 0 20 20"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                )}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="text-gray-500 italic">No tasks found.</p>
+                            )}
                         </>
+                    ) : (
+                        <p className="text-gray-500 italic">No list selected.</p>
                     )}
                 </div>
 
-                {/* Sağ Panel - Task Details */}
-                <TaskDetails selectedTask={selectedTask} selectedList={selectedList} selectedTaskId={selectedTaskId} />
+                {/* Right Panel - Task Details */}
+                <div className="w-2/5 p-6">
+                    <TaskDetails
+                        selectedTask={selectedTask}
+                        selectedList={selectedList}
+                        selectedTaskId={selectedTaskId}
+                        onAddTask={handleAddTask}
+                    />
+                </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default ToDoLists
+export default ToDoLists;
