@@ -19,7 +19,6 @@ function App() {
     <div>
       <ToDoLists filters={filters} sortOption={sortOption} />
 
-
     </div>
   )
 }
