@@ -9,34 +9,31 @@ function ToDoLists() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:3000/lists") // Adjust if your API is on another port
+        fetch("http://localhost:3001/lists")
             .then((res) => {
-                if (!res.ok) {
-                    throw new Error("Failed to fetch lists.");
-                }
+                if (!res.ok) throw new Error(`Failed to fetch lists: ${res.statusText}`);
                 return res.json();
             })
             .then((data) => {
                 setLists(data);
-                if (data.length > 0) {
-                    setSelectedListId(data[0].id);
-                }
+                if (data.length > 0) setSelectedListId(data[0].id);
             })
             .catch((err) => {
-                console.error(err);
-                setError("An error occurred while fetching lists.");
+                console.error("Fetch error:", err);
+                setError("An error occurred while fetching the to-do lists.");
             });
     }, []);
 
     const selectedList = lists.find((list) => list.id === selectedListId);
     const selectedTask = selectedList?.tasks.find((task) => task.id === selectedTaskId);
 
-    const filteredTasks =
-        selectedList?.tasks.filter((task) =>
-            task.name.toLowerCase().includes(searchTerm.toLowerCase())
-        ) || [];
+    const filteredTasks = selectedList?.tasks.filter((task) =>
+        task.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
     const handleDelete = () => {
+        if (!selectedListId) return;
+
         if (window.confirm("Are you sure you want to delete this list?")) {
             const updatedLists = lists.filter((list) => list.id !== selectedListId);
             setLists(updatedLists);
@@ -50,13 +47,10 @@ function ToDoLists() {
         }
     };
 
-    // New function to handle adding a task to the selected list and update state
     const handleAddTask = (newTask) => {
         setLists((prevLists) =>
             prevLists.map((list) =>
-                list.id === selectedListId
-                    ? { ...list, tasks: [...list.tasks, newTask] }
-                    : list
+                list.id === selectedListId ? { ...list, tasks: [...list.tasks, newTask] } : list
             )
         );
         setSelectedTaskId(newTask.id);
@@ -67,7 +61,7 @@ function ToDoLists() {
     };
 
     return (
-        <div className="bg-gray-100 p-6 ">
+        <div className="bg-gray-100 p-6">
             <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl flex divide-x">
                 {/* Left Panel - To-Do Lists */}
                 <div className="w-1/4 p-6">
@@ -79,7 +73,7 @@ function ToDoLists() {
                         </div>
                     )}
                     <ul className="space-y-2">
-                        {lists.length > 0 ? (
+                        {lists.length ? (
                             lists.map((list) => (
                                 <button
                                     key={list.id}
@@ -89,8 +83,8 @@ function ToDoLists() {
                                         setSearchTerm("");
                                     }}
                                     className={`w-full text-left p-3 rounded-lg transition-colors ${selectedListId === list.id
-                                        ? "bg-sky-200 text-sky-800 font-semibold"
-                                        : "hover:bg-gray-100"
+                                            ? "bg-sky-200 text-sky-800 font-semibold"
+                                            : "hover:bg-gray-100"
                                         }`}
                                 >
                                     {list.title}
@@ -118,40 +112,38 @@ function ToDoLists() {
 
                     {selectedList ? (
                         <>
-                            <div className="mb-4">
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Search tasks..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                            <div className="mb-4 relative">
+                                <input
+                                    type="text"
+                                    placeholder="Search tasks..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                                />
+                                <svg
+                                    className="absolute left-2 top-2.5 h-4 w-4 text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                     />
-                                    <svg
-                                        className="absolute left-2 top-2.5 h-4 w-4 text-gray-400"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                        />
-                                    </svg>
-                                </div>
+                                </svg>
                             </div>
 
-                            {filteredTasks.length > 0 ? (
+                            {filteredTasks.length ? (
                                 <ul className="space-y-2">
                                     {filteredTasks.map((task) => (
                                         <li
                                             key={task.id}
                                             onClick={() => handleTaskClick(task.id)}
                                             className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedTaskId === task.id
-                                                ? "bg-sky-100 border-l-4 border-sky-500"
-                                                : "bg-gray-50 hover:bg-gray-100"
+                                                    ? "bg-sky-100 border-l-4 border-sky-500"
+                                                    : "bg-gray-50 hover:bg-gray-100"
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between">

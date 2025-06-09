@@ -8,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start:server": "json-server --watch db.json --port 3000",
-    "start": "concurrently \"npm run start:server\" \"react-scripts start\""
+    "start:server": "json-server --watch db.json --port 3001",
+    "start": "concurrently \"npm run start:server\" \"vite\""
   },
   "dependencies": {
     "axios": "^1.9.0",
