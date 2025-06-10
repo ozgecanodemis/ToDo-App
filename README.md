@@ -10,14 +10,14 @@ Modern ve kullanıcı dostu bir yapılacaklar listesi uygulaması.
 
 ## Nasıl çalıştırılır?
 
-`Projeyi bilgisayara indir.`
+`Projeyi bilgisayara indirin.`
 
-`Terminalde proje klasörüne gir.`
+`Terminalde proje klasörüne girin.`
 
-`npm install yaz ve çalıştır, gerekli dosyalar yüklenir.`
+`npm install yazın ve çalıştırın, gerekli dosyalar yüklenir.`
 
-`npm run start:server yaz ve çalıştır, sahte sunucu açılır.`
+`npm run start:server yazın ve çalıştırın, sahte sunucu açılır.`
 
-`Yeni bir terminal aç, npm run dev yaz ve çalıştır, uygulama açılır.`
+`Yeni bir terminal açın, tekrar proje klasörüne gidin (aynı klasör içinde olun) npm run dev yazın ve çalıştırın, uygulama açılır`
 
 - Sahte sunucu 3001 portunda çalışır.
