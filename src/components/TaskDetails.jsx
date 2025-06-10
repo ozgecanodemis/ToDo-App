@@ -43,13 +43,13 @@ function TaskDetails({ selectedList }) {
         }
     }
 
-    // Filtreleme ve sıralama işlemlerini basit fonksiyonlarla yap
+
     const getFilteredAndSortedTasks = () => {
         if (!tasks) return []
 
         let filtered = [...tasks]
 
-        // Filtreleme
+
         if (filters.status) {
             filtered = filtered.filter((task) => task.status === filters.status)
         }
@@ -58,7 +58,7 @@ function TaskDetails({ selectedList }) {
             filtered = filtered.filter((task) => task.name.toLowerCase().includes(lowerName))
         }
 
-        // Sıralama
+
         if (sortOption === "createdAt") {
             filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
         } else if (sortOption === "deadline") {

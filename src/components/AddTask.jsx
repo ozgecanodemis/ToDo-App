@@ -46,7 +46,7 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
 
             onAddTask(newTask)
 
-            // Form alanlarını temizle
+
             setName("")
             setStatus("Not Started")
             setDeadline("")
