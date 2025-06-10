@@ -1,12 +1,23 @@
-# React + Vite
+# ToDo App 📝
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Modern ve kullanıcı dostu bir yapılacaklar listesi uygulaması.
 
-Currently, two official plugins are available:
+## 🚀 Özellikler
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Görev ekleme ve silme
+- Veriler JSON Server ile kalıcı olarak saklanır
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Nasıl çalıştırılır?
+
+`Projeyi bilgisayara indir.`
+
+`Terminalde proje klasörüne gir.`
+
+`npm install yaz ve çalıştır, gerekli dosyalar yüklenir.`
+
+`npm run start:server yaz ve çalıştır, sahte sunucu açılır.`
+
+`Yeni bir terminal aç, npm run dev yaz ve çalıştır, uygulama açılır.`
+
+- Sahte sunucu 3001 portunda, uygulama 3000 portunda çalışır.
