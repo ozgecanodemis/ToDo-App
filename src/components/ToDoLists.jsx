@@ -61,90 +61,91 @@ function ToDoLists() {
 
     return (
         <div className="bg-gray-100 p-6">
-            <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl flex divide-x">
-                <div>
-                    <div className="flex ">
-                        <div className="w-1/2 p-6">
-                            <h2 className="text-xl font-bold mb-4">To-Do Lists</h2>
-                            <hr className="mb-4" />
-                            {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
-                            <ul className="space-y-2">
-                                {lists.length ? (
-                                    lists.map((list) => (
-                                        <button
-                                            key={list.id}
-                                            onClick={() => {
-                                                setSelectedListId(list.id)
-                                                setSelectedTaskId(null)
-                                                setSearchTerm("")
-                                            }}
-                                            className={`w-full text-left p-3 rounded-lg transition-colors ${selectedListId === list.id ? "bg-sky-200 text-sky-800 font-semibold" : "hover:bg-gray-100"
-                                                }`}
-                                        >
-                                            {list.title}
-                                        </button>
-                                    ))
-                                ) : (
-                                    <p className="text-gray-500">No lists available.</p>
-                                )}
-                            </ul>
-                        </div>
+            <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl flex flex-col md:flex-row divide-y md:divide-x ">
 
-                        <div className="w-1/2 p-6">
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-xl font-bold">Tasks</h2>
-                                {selectedList && (
+
+                <div className="flex flex-row md:flex-col lg:flex-row">
+                    <div className="w-full lg:w-1/2 p-6">
+                        <h2 className="text-xl font-bold mb-4">To-Do Lists</h2>
+                        <hr className="mb-4" />
+                        {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
+                        <ul className="space-y-2">
+                            {lists.length ? (
+                                lists.map((list) => (
                                     <button
-                                        onClick={handleDelete}
-                                        className="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                                        key={list.id}
+                                        onClick={() => {
+                                            setSelectedListId(list.id)
+                                            setSelectedTaskId(null)
+                                            setSearchTerm("")
+                                        }}
+                                        className={`w-full text-left p-3 rounded-lg transition-colors ${selectedListId === list.id ? "bg-sky-200 text-sky-800 font-semibold" : "hover:bg-gray-100"
+                                            }`}
                                     >
-                                        Delete List
+                                        {list.title}
                                     </button>
-                                )}
-                            </div>
-
-                            {selectedList ? (
-                                <>
-                                    <div className="mb-4 relative">
-                                        <input
-                                            type="text"
-                                            placeholder="Search tasks..."
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
-                                        />
-                                    </div>
-
-                                    {filteredTasks.length ? (
-                                        <ul className="space-y-2">
-                                            {filteredTasks.map((task) => (
-                                                <li
-                                                    key={task.id}
-                                                    onClick={() => handleTaskClick(task.id)}
-                                                    className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedTaskId === task.id
-                                                        ? "bg-sky-100 border-l-4 border-sky-500"
-                                                        : "bg-gray-50 hover:bg-gray-100"
-                                                        }`}
-                                                >
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="font-medium">{task.name}</span>
-                                                        {selectedTaskId === task.id && <span className="h-4 w-4 text-sky-500"></span>}
-                                                    </div>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p className="text-gray-500 italic">No tasks found.</p>
-                                    )}
-                                </>
+                                ))
                             ) : (
-                                <p className="text-gray-500 italic">No list selected.</p>
+                                <p className="text-gray-500">No lists available.</p>
+                            )}
+                        </ul>
+                    </div>
+
+                    <div className="w-full lg:w-1/2 p-6">
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+                            <h2 className="text-xl font-bold">Tasks</h2>
+                            {selectedList && (
+                                <button
+                                    onClick={handleDelete}
+                                    className="bg-red-700 w-full md:w-1/2 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                                >
+                                    Delete List
+                                </button>
                             )}
                         </div>
+
+                        {selectedList ? (
+                            <>
+                                <div className="mb-4 relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Search tasks..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                                    />
+                                </div>
+
+                                {filteredTasks.length ? (
+                                    <ul className="space-y-2">
+                                        {filteredTasks.map((task) => (
+                                            <li
+                                                key={task.id}
+                                                onClick={() => handleTaskClick(task.id)}
+                                                className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedTaskId === task.id
+                                                    ? "bg-sky-100 border-l-4 border-sky-500"
+                                                    : "bg-gray-50 hover:bg-gray-100"
+                                                    }`}
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <span className="font-medium">{task.name}</span>
+                                                    {selectedTaskId === task.id && <span className="h-4 w-4 text-sky-500"></span>}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-gray-500 italic">No tasks found.</p>
+                                )}
+                            </>
+                        ) : (
+                            <p className="text-gray-500 italic">No list selected.</p>
+                        )}
                     </div>
                 </div>
 
-                <div className="w-1/2 p-6">
+
+                <div className="w-full md:w-1/2 p-6">
                     <TaskDetails
                         selectedTask={selectedTask}
                         selectedList={selectedList}

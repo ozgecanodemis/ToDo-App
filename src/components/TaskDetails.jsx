@@ -13,7 +13,7 @@ function TaskDetails({ selectedList }) {
     const [showModal, setShowModal] = useState(false)
     const [tasks, setTasks] = useState([])
 
-    // selectedList değiştiğinde tasks'ı güncelle
+
     useEffect(() => {
         if (selectedList) {
             setTasks(selectedList.tasks || [])
@@ -99,16 +99,16 @@ function TaskDetails({ selectedList }) {
 
                 <div className="flex flex-col">
                     <div className="flex border-b">
-                        <div className="w-1/4 p-2 font-bold">Name</div>
-                        <div className="w-1/4 p-2 font-bold">Description</div>
-                        <div className="w-1/4 p-2 font-bold">Deadline</div>
-                        <div className="w-1/4 p-2 font-bold">Status</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Name</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Description</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Deadline</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Status</div>
                     </div>
                     {filteredAndSortedTasks.length > 0 ? (
                         filteredAndSortedTasks.map((task) => (
                             <div key={task.id} className="flex border-b hover:bg-gray-50">
-                                <div className="w-1/4 p-2 font-medium">{task.name}</div>
-                                <div className="w-1/4 p-2 text-gray-600">{task.description}</div>
+                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">{task.name}</div>
+                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">{task.description}</div>
                                 <div className="w-1/4 p-2 text-gray-600">
                                     {new Date(task.deadline).toLocaleDateString(undefined, {
                                         year: "numeric",
@@ -116,7 +116,7 @@ function TaskDetails({ selectedList }) {
                                         day: "numeric",
                                     })}
                                 </div>
-                                <div className="w-1/4 p-2">
+                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">
                                     <span className={`px-2 py-1 rounded-md text-sm font-medium ${getStatusColor(task.status)}`}>
                                         {task.status}
                                     </span>
