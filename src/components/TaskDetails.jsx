@@ -99,25 +99,25 @@ function TaskDetails({ selectedList }) {
 
                 <div className="flex flex-col">
                     <div className="flex border-b">
-                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Name</div>
-                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Description</div>
-                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Deadline</div>
-                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">Status</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-bold">Name</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-bold">Description</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-bold">Deadline</div>
+                        <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-bold">Status</div>
                     </div>
                     {filteredAndSortedTasks.length > 0 ? (
                         filteredAndSortedTasks.map((task) => (
                             <div key={task.id} className="flex border-b hover:bg-gray-50">
-                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">{task.name}</div>
-                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">{task.description}</div>
-                                <div className="w-1/4 p-2 text-gray-600">
+                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base text-gray">{task.name}</div>
+                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base text-gray">{task.description}</div>
+                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base text-gray">
                                     {new Date(task.deadline).toLocaleDateString(undefined, {
                                         year: "numeric",
                                         month: "short",
                                         day: "numeric",
                                     })}
                                 </div>
-                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base font-medium">
-                                    <span className={`px-2 py-1 rounded-md text-sm font-medium ${getStatusColor(task.status)}`}>
+                                <div className="w-full sm:w-1/2 md:w-1/4 p-2 text-sm sm:text-base text-gray">
+                                    <span className={`px-1 py-1 rounded-md text-sm font-medium ${getStatusColor(task.status)}`}>
                                         {task.status}
                                     </span>
                                 </div>
