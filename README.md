@@ -20,4 +20,4 @@ Modern ve kullanıcı dostu bir yapılacaklar listesi uygulaması.
 
 `Yeni bir terminal aç, npm run dev yaz ve çalıştır, uygulama açılır.`
 
-- Sahte sunucu 3001 portunda, uygulama 3000 portunda çalışır.
+- Sahte sunucu 3001 portunda çalışır.
