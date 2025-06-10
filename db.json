@@ -19,18 +19,12 @@
           "status": "Not Started"
         },
         {
-          "id": 1749377427581,
-          "name": "active try",
-          "status": "Active",
-          "deadline": "2025-06-26",
-          "description": "some dec"
-        },
-        {
-          "id": 1749380117029,
-          "name": "deneme",
-          "status": "Pending",
-          "deadline": "2025-06-26",
-          "description": "desc"
+          "id": 1749513514609,
+          "name": "deneme ",
+          "status": "In Progress",
+          "deadline": "2025-06-13",
+          "description": "deneme deneme",
+          "createdAt": "2025-06-09T23:58:34.609Z"
         }
       ]
     },
@@ -51,6 +45,13 @@
           "description": "Description of Task Y",
           "deadline": "May 20, 2024",
           "status": "Pending"
+        },
+        {
+          "id": 1749506271439,
+          "name": "deneme",
+          "status": "Complete",
+          "deadline": "2025-06-20",
+          "description": "deneme"
         }
       ]
     }

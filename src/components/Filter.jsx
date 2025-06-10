@@ -1,39 +1,43 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 function Filter({ onFilterChange, onSortChange }) {
     const [statusFilter, setStatusFilter] = useState("")
-    const [expiredFilter, setExpiredFilter] = useState(false)
     const [nameFilter, setNameFilter] = useState("")
     const [sortOption, setSortOption] = useState("createdAt")
 
-    // useEffect ile filtre değişikliklerini yakala ve bildir
-    useEffect(() => {
+    const handleStatusChange = (e) => {
+        const newStatus = e.target.value
+        setStatusFilter(newStatus)
         onFilterChange({
-            status: statusFilter,
-            expired: expiredFilter,
+            status: newStatus,
             name: nameFilter,
         })
-    }, [statusFilter, expiredFilter, nameFilter, onFilterChange])
+    }
+
+    const handleNameChange = (e) => {
+        const newName = e.target.value
+        setNameFilter(newName)
+        onFilterChange({
+            status: statusFilter,
+            name: newName,
+        })
+    }
 
     const handleSortChange = (e) => {
-        setSortOption(e.target.value)
-        onSortChange(e.target.value)
+        const newSort = e.target.value
+        setSortOption(newSort)
+        onSortChange(newSort)
     }
 
     return (
         <div className="p-4 bg-gray-100 rounded-lg space-y-4">
-            {/* Filtreleme */}
             <div className="space-y-2">
                 <h3 className="font-semibold">Filter Tasks</h3>
-                {/* Durum Filter */}
+
                 <div>
                     <label className="block mb-1 text-sm font-medium">Status:</label>
-                    <select
-                        className="w-full border-gray-300 rounded p-2"
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                    >
+                    <select className="w-full border-gray-300 rounded p-2" value={statusFilter} onChange={handleStatusChange}>
                         <option value="">All</option>
                         <option value="Complete">Complete</option>
                         <option value="In Progress">In Progress</option>
@@ -43,18 +47,6 @@ function Filter({ onFilterChange, onSortChange }) {
                     </select>
                 </div>
 
-                {/* Süresi Dolmuş Filter */}
-                <div className="flex items-center gap-2">
-                    <input
-                        type="checkbox"
-                        id="expired"
-                        checked={expiredFilter}
-                        onChange={(e) => setExpiredFilter(e.target.checked)}
-                    />
-                    <label htmlFor="expired" className="text-sm">Show Expired Tasks</label>
-                </div>
-
-                {/* Ada Göre Filter */}
                 <div>
                     <label className="block mb-1 text-sm font-medium">Search by Name:</label>
                     <input
@@ -62,19 +54,14 @@ function Filter({ onFilterChange, onSortChange }) {
                         className="w-full border-gray-300 rounded p-2"
                         placeholder="Type a task name..."
                         value={nameFilter}
-                        onChange={(e) => setNameFilter(e.target.value)}
+                        onChange={handleNameChange}
                     />
                 </div>
             </div>
 
-            {/* Sıralama */}
             <div>
                 <h3 className="font-semibold mb-1">Sort By</h3>
-                <select
-                    className="w-full border-gray-300 rounded p-2"
-                    value={sortOption}
-                    onChange={handleSortChange}
-                >
+                <select className="w-full border-gray-300 rounded p-2" value={sortOption} onChange={handleSortChange}>
                     <option value="createdAt">Created At</option>
                     <option value="deadline">Deadline</option>
                     <option value="name">Name</option>
