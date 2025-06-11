@@ -4,7 +4,8 @@ import { useState, useEffect } from "react"
 import AddTask from "./AddTask"
 import Filter from "./Filter"
 
-function TaskDetails({ selectedList }) {
+function TaskDetails({ selectedList, onAddTask }) {
+
     const [filters, setFilters] = useState({
         status: "",
         name: "",
@@ -30,6 +31,10 @@ function TaskDetails({ selectedList }) {
 
     const handleAddTask = (newTask) => {
         setTasks((prevTasks) => [...prevTasks, newTask])
+
+        if (onAddTask) {
+            onAddTask(newTask)
+        }
     }
 
     const handleEditTask = (task) => {
@@ -121,10 +126,9 @@ function TaskDetails({ selectedList }) {
                     </button>
                 </div>
 
-                {/* Scrollable table eklendi */}
+
                 <div className="overflow-x-auto">
                     <div className="min-w-[500px]">
-
                         <div className="flex border-b">
                             <div className="w-[20%] p-1 text-xs sm:text-sm font-bold">Name</div>
                             <div className="w-[25%] p-1 text-xs sm:text-sm font-bold">Description</div>
@@ -135,19 +139,14 @@ function TaskDetails({ selectedList }) {
 
                         {filteredAndSortedTasks.length > 0 ? (
                             filteredAndSortedTasks.map((task) => (
-                                <div
-                                    key={task.id}
-                                    className="flex border-b hover:bg-gray-50"
-                                >
+                                <div key={task.id} className="flex border-b hover:bg-gray-50">
                                     {editingTask === task.id ? (
                                         <>
                                             <div className="w-[20%] p-1">
                                                 <input
                                                     type="text"
                                                     value={editForm.name}
-                                                    onChange={(e) =>
-                                                        setEditForm({ ...editForm, name: e.target.value })
-                                                    }
+                                                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                                                     className="w-full p-0.5 border rounded text-xs sm:text-sm"
                                                 />
                                             </div>
@@ -206,12 +205,8 @@ function TaskDetails({ selectedList }) {
                                         </>
                                     ) : (
                                         <>
-                                            <div className="w-[20%] p-1 text-xs sm:text-sm text-gray-700">
-                                                {task.name}
-                                            </div>
-                                            <div className="w-[25%] p-1 text-xs sm:text-sm text-gray-700">
-                                                {task.description}
-                                            </div>
+                                            <div className="w-[20%] p-1 text-xs sm:text-sm text-gray-700">{task.name}</div>
+                                            <div className="w-[25%] p-1 text-xs sm:text-sm text-gray-700">{task.description}</div>
                                             <div className="w-[20%] p-1 text-xs sm:text-sm text-gray-700">
                                                 {new Date(task.deadline).toLocaleDateString(undefined, {
                                                     year: "numeric",
@@ -220,11 +215,7 @@ function TaskDetails({ selectedList }) {
                                                 })}
                                             </div>
                                             <div className="w-[20%] p-1 text-xs sm:text-sm text-gray-700">
-                                                <span
-                                                    className={`px-1 py-0.5 rounded-md text-xs font-medium ${getStatusColor(
-                                                        task.status
-                                                    )}`}
-                                                >
+                                                <span className={`px-1 py-0.5 rounded-md text-xs font-medium ${getStatusColor(task.status)}`}>
                                                     {task.status}
                                                 </span>
                                             </div>
@@ -241,16 +232,11 @@ function TaskDetails({ selectedList }) {
                                 </div>
                             ))
                         ) : (
-                            <div className="p-8 text-center text-gray-500">
-                                No tasks in this list.
-                            </div>
+                            <div className="p-8 text-center text-gray-500">No tasks in this list.</div>
                         )}
                     </div>
                 </div>
             </div>
-
-
-
 
             <div className="mt-auto">
                 <Filter

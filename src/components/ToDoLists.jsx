@@ -9,21 +9,56 @@ function ToDoLists() {
     const [selectedTaskId, setSelectedTaskId] = useState(null)
     const [searchTerm, setSearchTerm] = useState("")
     const [error, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+
 
     useEffect(() => {
-        fetch("http://localhost:3001/lists")
-            .then((res) => {
-                if (!res.ok) throw new Error(`Failed to fetch lists: ${res.statusText}`)
-                return res.json()
-            })
-            .then((data) => {
-                setLists(data)
-                if (data.length > 0) setSelectedListId(data[0].id)
-            })
-            .catch((err) => {
-                console.error("Fetch error:", err)
-                setError("An error occurred while fetching the to-do lists.")
-            })
+
+
+        try {
+
+            const savedLists = localStorage.getItem("todoLists")
+
+
+            if (savedLists && savedLists !== "undefined" && savedLists !== "null") {
+
+                const parsedLists = JSON.parse(savedLists)
+
+
+
+                setLists(parsedLists)
+
+                if (parsedLists.length > 0) {
+                    setSelectedListId(parsedLists[0].id)
+                }
+                setIsLoading(false)
+            } else {
+
+
+                fetch("http://localhost:3001/lists")
+                    .then((res) => {
+                        if (!res.ok) throw new Error(`Failed to fetch lists: ${res.statusText}`)
+                        return res.json()
+                    })
+                    .then((data) => {
+
+                        setLists(data)
+                        if (data.length > 0) setSelectedListId(data[0].id)
+
+                        localStorage.setItem("todoLists", JSON.stringify(data))
+                        setIsLoading(false)
+                    })
+                    .catch((err) => {
+
+                        setError("An error occurred while fetching the to-do lists.")
+                        setIsLoading(false)
+                    })
+            }
+        } catch (error) {
+
+            setError("An error occurred while loading data.")
+            setIsLoading(false)
+        }
     }, [])
 
     const selectedList = lists.find((list) => list.id === selectedListId)
@@ -45,25 +80,49 @@ function ToDoLists() {
             } else {
                 setSelectedListId(null)
             }
+
+
+            localStorage.setItem("todoLists", JSON.stringify(updatedLists))
         }
     }
 
     const handleAddTask = (newTask) => {
-        setLists((prevLists) =>
-            prevLists.map((list) => (list.id === selectedListId ? { ...list, tasks: [...list.tasks, newTask] } : list)),
+
+
+        const updatedLists = lists.map((list) =>
+            list.id === selectedListId ? { ...list, tasks: [...list.tasks, newTask] } : list,
         )
+
+
+
+        setLists(updatedLists)
         setSelectedTaskId(newTask.id)
+
+        // Yeni task eklendiğinde local storage'ı güncelle
+        localStorage.setItem("todoLists", JSON.stringify(updatedLists))
+
     }
 
     const handleTaskClick = (taskId) => {
         setSelectedTaskId(taskId)
     }
 
+
+    if (isLoading) {
+        return (
+            <div className="bg-gray-100 p-6">
+                <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl p-6 text-center">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        )
+    }
+
+
+
     return (
         <div className="bg-gray-100 p-6">
             <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl flex flex-col md:flex-row divide-y md:divide-x ">
-
-
                 <div className="flex flex-row md:flex-col lg:flex-row">
                     <div className="w-full lg:w-1/2 p-6">
                         <h2 className="text-xl font-bold mb-4">To-Do Lists</h2>
@@ -143,7 +202,6 @@ function ToDoLists() {
                         )}
                     </div>
                 </div>
-
 
                 <div className="w-full md:w-1/2 p-6">
                     <TaskDetails
