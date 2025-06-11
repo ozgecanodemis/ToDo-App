@@ -52,8 +52,7 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
         }
 
         try {
-            // Remove the API call since localhost won't work in production
-            // Just add the task locally
+
             onAddTask(newTask)
 
             setName("")

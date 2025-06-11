@@ -11,7 +11,7 @@ function ToDoLists() {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
 
-    // Default data for when no local storage or API is available
+
     const defaultLists = [
         {
             id: "1",
@@ -71,14 +71,14 @@ function ToDoLists() {
                 }
                 setIsLoading(false)
             } else {
-                // Use default data instead of trying to fetch from localhost
+
                 setLists(defaultLists)
                 setSelectedListId(defaultLists[0].id)
                 localStorage.setItem("todoLists", JSON.stringify(defaultLists))
                 setIsLoading(false)
             }
         } catch (error) {
-            // If localStorage fails, use default data
+
             setLists(defaultLists)
             setSelectedListId(defaultLists[0].id)
             setIsLoading(false)
@@ -197,8 +197,8 @@ function ToDoLists() {
                                                 key={task.id}
                                                 onClick={() => handleTaskClick(task.id)}
                                                 className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedTaskId === task.id
-                                                        ? "bg-sky-100 border-l-4 border-sky-500"
-                                                        : "bg-gray-50 hover:bg-gray-100"
+                                                    ? "bg-sky-100 border-l-4 border-sky-500"
+                                                    : "bg-gray-50 hover:bg-gray-100"
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between">
