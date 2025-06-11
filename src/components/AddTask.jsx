@@ -12,10 +12,41 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (!name.trim() || !deadline.trim()) {
-            setError("Please fill in all required fields: Name and Deadline.")
+        setError(null)
+
+
+        const errors = []
+
+
+        if (!name.trim()) {
+            errors.push("Name is required.")
+        } else if (name.trim().length < 3) {
+            errors.push("Name must be at least 3 characters long.")
+        } else if (!/^[a-zA-Z0-9\s\-_.]+$/.test(name.trim())) {
+            errors.push("Name can only contain letters, numbers, spaces, hyphens, underscores, and periods.")
+        }
+
+
+        if (!deadline.trim()) {
+            errors.push("Deadline is required.")
+        } else {
+            const today = new Date().toISOString().split("T")[0]
+            if (deadline < today) {
+                errors.push("Deadline cannot be in the past.")
+            }
+        }
+
+
+        if (description.length > 200) {
+            errors.push("Description cannot exceed 200 characters.")
+        }
+
+
+        if (errors.length > 0) {
+            setError(errors.join(" "))
             return
         }
+
 
         const newTask = {
             id: Date.now(),
@@ -27,6 +58,7 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
         }
 
         try {
+
             const updatedTasks = [...selectedList.tasks, newTask]
 
             const response = await fetch(`http://localhost:3001/lists/${selectedList.id}`, {
@@ -71,7 +103,11 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
                 <form onSubmit={handleSubmit}>
                     <h3 className="text-xl font-semibold mb-4">Add New Task</h3>
 
-                    {error && <div className="bg-red-100 text-red-700 p-2 mb-4 rounded">{error}</div>}
+                    {error && (
+                        <div className="bg-red-100 text-red-700 p-2 mb-4 rounded whitespace-pre-line">
+                            {error}
+                        </div>
+                    )}
 
                     <label className="block mb-2">
                         Name <span className="text-red-500">*</span>
@@ -117,10 +153,14 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             rows={3}
+                            placeholder="(Optional)"
                         />
                     </label>
 
-                    <button type="submit" className="px-4 py-2 rounded bg-sky-500 text-white hover:bg-sky-600 transition">
+                    <button
+                        type="submit"
+                        className="px-4 py-2 rounded bg-sky-500 text-white hover:bg-sky-600 transition"
+                    >
                         Add Task
                     </button>
                 </form>
