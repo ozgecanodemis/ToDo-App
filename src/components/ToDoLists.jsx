@@ -11,52 +11,76 @@ function ToDoLists() {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
 
+    // Default data for when no local storage or API is available
+    const defaultLists = [
+        {
+            id: "1",
+            title: "Example List 1",
+            tasks: [
+                {
+                    id: 1,
+                    name: "Task A",
+                    description: "Description of Task A",
+                    deadline: "2024-05-01",
+                    status: "In Progress",
+                    createdAt: new Date().toISOString(),
+                },
+                {
+                    id: 2,
+                    name: "Task B",
+                    description: "Description of Task B",
+                    deadline: "2024-04-26",
+                    status: "Not Started",
+                    createdAt: new Date().toISOString(),
+                },
+            ],
+        },
+        {
+            id: "2",
+            title: "Example List 2",
+            tasks: [
+                {
+                    id: 5,
+                    name: "Task X",
+                    description: "Description of Task X",
+                    deadline: "2024-05-15",
+                    status: "Active",
+                    createdAt: new Date().toISOString(),
+                },
+                {
+                    id: 6,
+                    name: "Task Y",
+                    description: "Description of Task Y",
+                    deadline: "2024-05-20",
+                    status: "Pending",
+                    createdAt: new Date().toISOString(),
+                },
+            ],
+        },
+    ]
 
     useEffect(() => {
-
-
         try {
-
             const savedLists = localStorage.getItem("todoLists")
 
-
             if (savedLists && savedLists !== "undefined" && savedLists !== "null") {
-
                 const parsedLists = JSON.parse(savedLists)
-
-
-
                 setLists(parsedLists)
-
                 if (parsedLists.length > 0) {
                     setSelectedListId(parsedLists[0].id)
                 }
                 setIsLoading(false)
             } else {
-
-
-                fetch("http://localhost:3001/lists")
-                    .then((res) => {
-                        if (!res.ok) throw new Error(`Failed to fetch lists: ${res.statusText}`)
-                        return res.json()
-                    })
-                    .then((data) => {
-
-                        setLists(data)
-                        if (data.length > 0) setSelectedListId(data[0].id)
-
-                        localStorage.setItem("todoLists", JSON.stringify(data))
-                        setIsLoading(false)
-                    })
-                    .catch((err) => {
-
-                        setError("An error occurred while fetching the to-do lists.")
-                        setIsLoading(false)
-                    })
+                // Use default data instead of trying to fetch from localhost
+                setLists(defaultLists)
+                setSelectedListId(defaultLists[0].id)
+                localStorage.setItem("todoLists", JSON.stringify(defaultLists))
+                setIsLoading(false)
             }
         } catch (error) {
-
-            setError("An error occurred while loading data.")
+            // If localStorage fails, use default data
+            setLists(defaultLists)
+            setSelectedListId(defaultLists[0].id)
             setIsLoading(false)
         }
     }, [])
@@ -81,32 +105,25 @@ function ToDoLists() {
                 setSelectedListId(null)
             }
 
-
             localStorage.setItem("todoLists", JSON.stringify(updatedLists))
         }
     }
 
     const handleAddTask = (newTask) => {
-
-
         const updatedLists = lists.map((list) =>
             list.id === selectedListId ? { ...list, tasks: [...list.tasks, newTask] } : list,
         )
-
-
 
         setLists(updatedLists)
         setSelectedTaskId(newTask.id)
 
         // Yeni task eklendiğinde local storage'ı güncelle
         localStorage.setItem("todoLists", JSON.stringify(updatedLists))
-
     }
 
     const handleTaskClick = (taskId) => {
         setSelectedTaskId(taskId)
     }
-
 
     if (isLoading) {
         return (
@@ -117,8 +134,6 @@ function ToDoLists() {
             </div>
         )
     }
-
-
 
     return (
         <div className="bg-gray-100 p-6">
@@ -182,8 +197,8 @@ function ToDoLists() {
                                                 key={task.id}
                                                 onClick={() => handleTaskClick(task.id)}
                                                 className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedTaskId === task.id
-                                                    ? "bg-sky-100 border-l-4 border-sky-500"
-                                                    : "bg-gray-50 hover:bg-gray-100"
+                                                        ? "bg-sky-100 border-l-4 border-sky-500"
+                                                        : "bg-gray-50 hover:bg-gray-100"
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between">

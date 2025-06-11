@@ -14,9 +14,7 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
 
         setError(null)
 
-
         const errors = []
-
 
         if (!name.trim()) {
             errors.push("Name is required.")
@@ -25,7 +23,6 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
         } else if (!/^[a-zA-Z0-9\s\-_.]+$/.test(name.trim())) {
             errors.push("Name can only contain letters, numbers, spaces, hyphens, underscores, and periods.")
         }
-
 
         if (!deadline.trim()) {
             errors.push("Deadline is required.")
@@ -36,17 +33,14 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
             }
         }
 
-
         if (description.length > 200) {
             errors.push("Description cannot exceed 200 characters.")
         }
-
 
         if (errors.length > 0) {
             setError(errors.join(" "))
             return
         }
-
 
         const newTask = {
             id: Date.now(),
@@ -58,26 +52,9 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
         }
 
         try {
-
-            const updatedTasks = [...selectedList.tasks, newTask]
-
-            const response = await fetch(`http://localhost:3001/lists/${selectedList.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    ...selectedList,
-                    tasks: updatedTasks,
-                }),
-            })
-
-            if (!response.ok) {
-                throw new Error("Failed to add task.")
-            }
-
+            // Remove the API call since localhost won't work in production
+            // Just add the task locally
             onAddTask(newTask)
-
 
             setName("")
             setStatus("Not Started")
@@ -103,11 +80,7 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
                 <form onSubmit={handleSubmit}>
                     <h3 className="text-xl font-semibold mb-4">Add New Task</h3>
 
-                    {error && (
-                        <div className="bg-red-100 text-red-700 p-2 mb-4 rounded whitespace-pre-line">
-                            {error}
-                        </div>
-                    )}
+                    {error && <div className="bg-red-100 text-red-700 p-2 mb-4 rounded whitespace-pre-line">{error}</div>}
 
                     <label className="block mb-2">
                         Name <span className="text-red-500">*</span>
@@ -157,10 +130,7 @@ function AddTask({ selectedList, onAddTask, show, onClose }) {
                         />
                     </label>
 
-                    <button
-                        type="submit"
-                        className="px-4 py-2 rounded bg-sky-500 text-white hover:bg-sky-600 transition"
-                    >
+                    <button type="submit" className="px-4 py-2 rounded bg-sky-500 text-white hover:bg-sky-600 transition">
                         Add Task
                     </button>
                 </form>
