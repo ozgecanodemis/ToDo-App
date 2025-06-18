@@ -12,52 +12,7 @@ function ToDoLists() {
     const [isLoading, setIsLoading] = useState(true)
 
 
-    const defaultLists = [
-        {
-            id: "1",
-            title: "Example List 1",
-            tasks: [
-                {
-                    id: 1,
-                    name: "Task A",
-                    description: "Description of Task A",
-                    deadline: "2024-05-01",
-                    status: "In Progress",
-                    createdAt: new Date().toISOString(),
-                },
-                {
-                    id: 2,
-                    name: "Task B",
-                    description: "Description of Task B",
-                    deadline: "2024-04-26",
-                    status: "Not Started",
-                    createdAt: new Date().toISOString(),
-                },
-            ],
-        },
-        {
-            id: "2",
-            title: "Example List 2",
-            tasks: [
-                {
-                    id: 5,
-                    name: "Task X",
-                    description: "Description of Task X",
-                    deadline: "2024-05-15",
-                    status: "Active",
-                    createdAt: new Date().toISOString(),
-                },
-                {
-                    id: 6,
-                    name: "Task Y",
-                    description: "Description of Task Y",
-                    deadline: "2024-05-20",
-                    status: "Pending",
-                    createdAt: new Date().toISOString(),
-                },
-            ],
-        },
-    ]
+
 
     useEffect(() => {
         try {
@@ -139,31 +94,38 @@ function ToDoLists() {
         <div className="bg-gray-100 p-6">
             <div className="max-w-7xl mx-auto bg-white shadow-lg rounded-xl flex flex-col md:flex-row divide-y md:divide-x ">
                 <div className="flex flex-row md:flex-col lg:flex-row">
-                    <div className="w-full lg:w-1/2 p-6">
-                        <h2 className="text-xl font-bold mb-4">To-Do Lists</h2>
-                        <hr className="mb-4" />
-                        {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
-                        <ul className="space-y-2">
-                            {lists.length ? (
-                                lists.map((list) => (
-                                    <button
-                                        key={list.id}
-                                        onClick={() => {
-                                            setSelectedListId(list.id)
-                                            setSelectedTaskId(null)
-                                            setSearchTerm("")
-                                        }}
-                                        className={`w-full text-left p-3 rounded-lg transition-colors ${selectedListId === list.id ? "bg-sky-200 text-sky-800 font-semibold" : "hover:bg-gray-100"
-                                            }`}
-                                    >
-                                        {list.title}
-                                    </button>
-                                ))
-                            ) : (
-                                <p className="text-gray-500">No lists available.</p>
-                            )}
-                        </ul>
+
+                    <div className="w-full lg:w-1/2 p-6 grid justify-items">
+                        <div className="">
+                            <h2 className="text-xl font-bold mb-4">To-Do Lists</h2>
+                            <hr className="mb-4" />
+                            {error && <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>}
+                            <ul className="space-y-2">
+                                {lists.length ? (
+                                    lists.map((list) => (
+                                        <button
+                                            key={list.id}
+                                            onClick={() => {
+                                                setSelectedListId(list.id)
+                                                setSelectedTaskId(null)
+                                                setSearchTerm("")
+                                            }}
+                                            className={`w-full text-left p-3 rounded-lg transition-colors ${selectedListId === list.id ? "bg-sky-200 text-sky-800 font-semibold" : "hover:bg-gray-100"
+                                                }`}
+                                        >
+                                            {list.title}
+                                        </button>
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500">No lists available.</p>
+                                )}
+                            </ul>
+                        </div>
+
+                        <button className=" w-full h-12  p-3 rounded-lg transition-colors bg-sky-500 text-white hover:bg-sky-600 transition"> Add List</button>
                     </div>
+
+
 
                     <div className="w-full lg:w-1/2 p-6">
                         <div className="flex flex-col md:flex-row justify-between items-center mb-4">
@@ -217,6 +179,7 @@ function ToDoLists() {
                         )}
                     </div>
                 </div>
+
 
                 <div className="w-full md:w-1/2 p-6">
                     <TaskDetails
