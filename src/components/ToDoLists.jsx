@@ -12,7 +12,52 @@ function ToDoLists() {
     const [isLoading, setIsLoading] = useState(true)
 
 
-
+    const defaultLists = [
+        {
+            id: "1",
+            title: "Example List 1",
+            tasks: [
+                {
+                    id: 1,
+                    name: "Task A",
+                    description: "Description of Task A",
+                    deadline: "2024-05-01",
+                    status: "In Progress",
+                    createdAt: new Date().toISOString(),
+                },
+                {
+                    id: 2,
+                    name: "Task B",
+                    description: "Description of Task B",
+                    deadline: "2024-04-26",
+                    status: "Not Started",
+                    createdAt: new Date().toISOString(),
+                },
+            ],
+        },
+        {
+            id: "2",
+            title: "Example List 2",
+            tasks: [
+                {
+                    id: 5,
+                    name: "Task X",
+                    description: "Description of Task X",
+                    deadline: "2024-05-15",
+                    status: "Active",
+                    createdAt: new Date().toISOString(),
+                },
+                {
+                    id: 6,
+                    name: "Task Y",
+                    description: "Description of Task Y",
+                    deadline: "2024-05-20",
+                    status: "Pending",
+                    createdAt: new Date().toISOString(),
+                },
+            ],
+        },
+    ]
 
     useEffect(() => {
         try {
