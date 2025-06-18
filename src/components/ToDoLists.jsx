@@ -109,6 +109,25 @@ function ToDoLists() {
         }
     }
 
+    const handleAddList = () => {
+        const newListTitle = prompt("Enter the title for the new list:")
+        if (!newListTitle) return
+
+        const newList = {
+            id: Date.now().toString(), // benzersiz ID
+            title: newListTitle,
+            tasks: [],
+        }
+
+        const updatedLists = [...lists, newList]
+        setLists(updatedLists)
+        setSelectedListId(newList.id)
+        setSelectedTaskId(null)
+        setSearchTerm("")
+        localStorage.setItem("todoLists", JSON.stringify(updatedLists))
+    }
+
+
     const handleAddTask = (newTask) => {
         const updatedLists = lists.map((list) =>
             list.id === selectedListId ? { ...list, tasks: [...list.tasks, newTask] } : list,
@@ -120,6 +139,8 @@ function ToDoLists() {
         // Yeni task eklendiğinde local storage'ı güncelle
         localStorage.setItem("todoLists", JSON.stringify(updatedLists))
     }
+
+
 
     const handleTaskClick = (taskId) => {
         setSelectedTaskId(taskId)
@@ -167,7 +188,10 @@ function ToDoLists() {
                             </ul>
                         </div>
 
-                        <button className=" w-full h-12  p-3 rounded-lg transition-colors bg-sky-500 text-white hover:bg-sky-600 transition"> Add List</button>
+                        <button
+
+                            onClick={handleAddList}
+                            className=" w-full h-12  p-3 rounded-lg transition-colors bg-sky-500 text-white hover:bg-sky-600 transition"> Add List</button>
                     </div>
 
 
